@@ -1,21 +1,13 @@
-KANBAN 看板
+KANBAN
 ===========
 
-Demo
-----
-Live demo hosted here on Heroku (database is reset daily):
-[**LIVE DEMO**](http://kanban.seanomlor.com)
-
-[![Screenshot](/app/assets/images/screenshot.jpg)](http://kanban.seanomlor.com)
-
-Summary
--------
-Kanban is a work-in-progress Trello clone I developed for a final project at [App Academy](http://appacademy.io), a 9-week Ruby on Rails and JavaScript web development intensive in San Francisco.
-
-Built with Ruby on Rails on the backend as a JSON API for Backbone.js on the frontend.
+* Run 'bundle install'
+* Configure database.yml and seeds.rb
+* rake db:create / db:migrate / db:seed
 
 Notes
 -----
+* Forked from https://github.com/somlor/kanban
 * Hand-rolled Rails user authentication with BCrypt
 * Custom, nested Rails JSON templating with [Rabl](https://github.com/nesquena/rabl)
 * Backbone models/collections with [Backbone-relational.js](http://backbonerelational.org/)
