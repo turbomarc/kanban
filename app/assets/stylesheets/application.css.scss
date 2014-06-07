@@ -571,11 +571,11 @@ section.board-show { }
 	}
 
 	.card_title span {
-		@include ellipsis(360px);
+//		@include ellipsis(360px);
 	}
 
 	span.card_title {
-		@include ellipsis(200px);
+//		@include ellipsis(200px);
 		pointer-events: none;
 	}
 
