@@ -482,14 +482,11 @@ section.board-show { }
   	color: #4d4d4d;
 
   	position: absolute;
-  	top: 0px;
-  	right: 0px;
+  	bottom: 10px;
+  	right: 30px;
   	font-size: 12px;
 
-    width: 17px;
-    height: 20px;
-
-    opacity: 0;
+    opacity: 1;
     -webkit-transition: .6s;
     -moz-transition: .6s;
     transition: .6s;

@@ -12,6 +12,7 @@ Kanban.Views.CardShow = Backbone.View.extend({
 
   events: {
     "submit form#add_comment": "addComment",
+    "click button.archive_card": "archiveCard",
   },
 
   addComment: function (event) {
@@ -63,6 +64,26 @@ Kanban.Views.CardShow = Backbone.View.extend({
       }
     });
   },
+  
+  archiveCard: function (event) {
+      event.stopPropagation();
+         var that = this;
+
+      var card = that.model;
+      var cards = card.collection;
+      var comments = card.get("comments");
+
+      $("#card_" + card.id).addClass("animated flipOutX");
+      $.modal.close(); // Close any open modals.
+        setTimeout(function () {
+            // remove card
+            card.destroy({
+                success: function (data) {
+                cards.remove(card);
+                }
+            });
+         }, 300);
+    },
 
   render: function () {
   	var that = this;
