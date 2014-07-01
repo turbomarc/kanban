@@ -2,9 +2,12 @@ Kanban.Views.ListShow = Backbone.View.extend({
 	template: JST['lists/show'],
 	tagName: "div",
   className: "list",
+  cardToOpenId: null,
 
-	initialize: function () {
+	initialize: function (attributes) {
 		var that = this;
+		that.cardToOpenId = parseInt(attributes.cardToOpenId);
+		console.log("List initialized with cardToOpenId: " + that.cardToOpenId);
     // that.model.on("change", that.render, that);
     that.model.on("add", that.render, that);
 		that.model.get("cards").on("add", that.render, that);
@@ -15,7 +18,7 @@ Kanban.Views.ListShow = Backbone.View.extend({
 	events: {
   	"click div.card": "cardClick",
     "submit form.add_card": "addCard",
-    "click button.archive_card": "archiveCard",
+    "click button.archive_card": "archiveCard"
 	},
 
   cardClick: function (event) {
@@ -23,22 +26,31 @@ Kanban.Views.ListShow = Backbone.View.extend({
   	var that = this;
 
     var cardId = parseInt($(event.target).data("card-id"));
-    var $cardModal = $("section.card_detail");
-
-		var list = that.model;
-		var cards = list.get("cards");
-		var card = cards.get(cardId);
-
-    card.fetch({
-    	success: function (card) {
-		    var cardShow = new Kanban.Views.CardShow({
-		      model: card,
-		    });
-
-		  	$cardModal.html(cardShow.render().$el);
-		  	$cardModal.find("article.card_detail").modal();
-    	}
-    });
+    console.log("Clicked open card: " + cardId)
+    that.cardOpen(cardId);
+  },
+  
+  cardOpen: function (cardId) {
+      var that = this;
+      var $cardModal = $("section.card_detail");
+   	  var list = that.model;
+   	  var cards = list.get("cards");
+   	  var card = cards.get(cardId);
+   	  console.log("Opening cardId: " + cardId);
+ 
+      card.fetch({
+        error: function(model, response) {
+          console.log("FETCH ERROR: " + response.responseText);
+        },
+      	success: function (card) {
+  		    var cardShow = new Kanban.Views.CardShow({
+  		      model: card,
+  		    });
+  		  	$cardModal.html(cardShow.render().$el);
+  		  	$cardModal.find("article.card_detail").modal();
+  		  	console.log("Opened cardId: " + cardId);
+      	}
+      });  
   },
 
   addCard: function (event) {
@@ -81,14 +93,17 @@ Kanban.Views.ListShow = Backbone.View.extend({
 
 		// save card
 		card.save(attrs.card, {
+		  error: function(model, response) {
+        console.log("SAVE ERROR: " + response.responseText);
+      },
 			success: function (data) {
 				var list_id = list.id;
 
 				// add card to collection
 				cards.add(card);
 
-				console.log("card post-save");
-				console.log(card);
+//				console.log("card post-save");
+//				console.log(card);
 
 				// animate card insertion
 				setTimeout(function () {
@@ -142,6 +157,16 @@ Kanban.Views.ListShow = Backbone.View.extend({
 			collection: cards
 		});
 		that.$("section.cards").html(cardsIndex.render().el);
+		
+		    var cardIds = _.chain(cards._byId)
+                       .map(function(card, index){ return card.id; })
+                       .uniq()
+                       .value();
+        if(_.contains(cardIds, that.cardToOpenId)){
+          console.log("Direct request for card: " + that.cardToOpenId);
+          that.cardOpen(that.cardToOpenId);
+//          that.cardToOpenId = null;
+        }
 
     // inline edit for list title
     that.$(".js-edit-list-title").editable(function (value, settings) {
@@ -190,7 +215,9 @@ Kanban.Views.ListShow = Backbone.View.extend({
         };
       }
     });
+    
 
+	
 		return that;
 	}
 });

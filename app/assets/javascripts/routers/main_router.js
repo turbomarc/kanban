@@ -6,7 +6,8 @@ Kanban.Routers.Main = Backbone.Router.extend({
   routes: {
     "": "index",
     "/login": "login",
-    "boards/:id": "show"
+    "boards/:id": "show",
+    "boards/:id/cards/:cardId": "showCard"
   },
 
   index: function () {
@@ -26,7 +27,20 @@ Kanban.Routers.Main = Backbone.Router.extend({
     var boardShow = new Kanban.Views.BoardShow({
       model: board
     });
+    console.log("show: Re-render board")
+    that.$rootEl.html(boardShow.render().$el);
+  },
+  
+  showCard: function (id, cardId) {
+    var that = this;
 
+    var board = Kanban.boards.get(id);
+    console.log("cardId before boardShow: " + cardId);
+    var boardShow = new Kanban.Views.BoardShow({
+      model: board,
+      cardId: cardId
+    });
+    console.log("cardId after boardShow: " + cardId);
     that.$rootEl.html(boardShow.render().$el);
   }
 

@@ -13,6 +13,7 @@ Kanban.Views.CardShow = Backbone.View.extend({
   events: {
     "submit form#add_comment": "addComment",
     "click button.archive_card": "archiveCard",
+    "click .close-modal-custom": "removeCardIdFromUrl"
   },
 
   addComment: function (event) {
@@ -84,6 +85,15 @@ Kanban.Views.CardShow = Backbone.View.extend({
             });
          }, 300);
     },
+    
+    removeCardIdFromUrl: function () {
+      var urlarr = $(location).attr('href').split('/cards');
+   // console.log("Server: " + urlarr[0] + " Card: " + urlarr[1]);
+      if(urlarr[1] != null) {
+        console.log("Reloading " + urlarr[0]);
+        $(location).attr('href', urlarr[0]);
+      }
+    },
 
   render: function () {
   	var that = this;
@@ -113,7 +123,6 @@ Kanban.Views.CardShow = Backbone.View.extend({
 
 		// decorate comment timestamps
 	 	that.$el.find("abbr.timeago").timeago();
-
   	return that;
   }
 });
