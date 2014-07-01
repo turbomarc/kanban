@@ -2,9 +2,11 @@ Kanban.Views.BoardShow = Backbone.View.extend({
   template: JST['boards/show'],
   tagName: "section",
   className: "board-show group",
+  cardId: null,
 
-  initialize: function () {
+  initialize: function (attributes) {
     var that = this;
+    that.cardId = attributes.cardId;
 		that.model.on("all", that.render, that);
   },
 
@@ -116,12 +118,17 @@ Kanban.Views.BoardShow = Backbone.View.extend({
     }));
 
 		// render lists
+		console.log("Before full list render, cardId: " + that.cardId);
 		lists.each(function (list) {
 			var listShow = new Kanban.Views.ListShow({
-				model: list
+				model: list,
+				cardToOpenId: that.cardId
 			});
 			that.$("section.lists").append(listShow.render().el);
 		});
+		
+//		that.cardId = null;
+		console.log("After full list render, cardId: " + that.cardId);
 
     // include members in sidebar
 		var usersIndex = new Kanban.Views.UsersIndex({
