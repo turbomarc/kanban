@@ -88,10 +88,9 @@ Kanban.Views.CardShow = Backbone.View.extend({
     
     removeCardIdFromUrl: function () {
       var urlarr = $(location).attr('href').split('/cards');
-   // console.log("Server: " + urlarr[0] + " Card: " + urlarr[1]);
       if(urlarr[1] != null) {
-        console.log("Reloading " + urlarr[0]);
-        $(location).attr('href', urlarr[0]);
+      window.history.pushState("", document.title, urlarr[0]);
+      //  $(location).attr('href', urlarr[0]);
       }
     },
 
