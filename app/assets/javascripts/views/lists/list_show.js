@@ -143,7 +143,7 @@ Kanban.Views.ListShow = Backbone.View.extend({
 
 		var list = that.model;
 		var list_id = list.get("id");
-		// console.log("render list " + list_id);
+		console.log("Rendering list: " + list_id);
 
     // list show
 		that.$el.attr("id", "list_" + list_id);
@@ -157,16 +157,6 @@ Kanban.Views.ListShow = Backbone.View.extend({
 			collection: cards
 		});
 		that.$("section.cards").html(cardsIndex.render().el);
-		
-		    var cardIds = _.chain(cards._byId)
-                       .map(function(card, index){ return card.id; })
-                       .uniq()
-                       .value();
-        if(_.contains(cardIds, that.cardToOpenId)){
-          console.log("Direct request for card: " + that.cardToOpenId);
-          that.cardOpen(that.cardToOpenId);
-//          that.cardToOpenId = null;
-        }
 
     // inline edit for list title
     that.$(".js-edit-list-title").editable(function (value, settings) {
@@ -202,8 +192,7 @@ Kanban.Views.ListShow = Backbone.View.extend({
 	        var listId = parseInt($(this).data("listId"));
 	        sortData += '&list_id=' + listId;
 
-					// console.log("listId:")
-					// console.log(listId);
+					 console.log("Updated list:" + listId);
 
 	        $.post(sortCardsUrl, sortData, function (resortedCards) {
 						var cards = list.get("cards");
@@ -216,7 +205,18 @@ Kanban.Views.ListShow = Backbone.View.extend({
       }
     });
     
+	    var cardIds = _.chain(cards._byId)
+                     .map(function(card, index){ return card.id; })
+                     .uniq()
+                     .value();
+      if(_.contains(cardIds, that.cardToOpenId)){
+        console.log("Direct request for card: " + that.cardToOpenId);
+        that.cardOpen(that.cardToOpenId);
+//          that.cardToOpenId = null;
 
+// First card in a list always fails, but if the other cards in the list are then requested, it works (actually tries to load them all)
+// probably due to not clearing something out, but that's secondary
+      }
 	
 		return that;
 	}

@@ -118,7 +118,7 @@ Kanban.Views.BoardShow = Backbone.View.extend({
     }));
 
 		// render lists
-		console.log("Before full list render, cardId: " + that.cardId);
+		console.log("Loading lists, cardId: " + that.cardId);
 		lists.each(function (list) {
 			var listShow = new Kanban.Views.ListShow({
 				model: list,
@@ -127,9 +127,6 @@ Kanban.Views.BoardShow = Backbone.View.extend({
 			that.$("section.lists").append(listShow.render().el);
 		});
 		
-//		that.cardId = null;
-		console.log("After full list render, cardId: " + that.cardId);
-
     // include members in sidebar
 		var usersIndex = new Kanban.Views.UsersIndex({
 			collection: users

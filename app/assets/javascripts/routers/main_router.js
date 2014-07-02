@@ -27,7 +27,7 @@ Kanban.Routers.Main = Backbone.Router.extend({
     var boardShow = new Kanban.Views.BoardShow({
       model: board
     });
-    console.log("show: Re-render board")
+
     that.$rootEl.html(boardShow.render().$el);
   },
   
